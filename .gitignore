@@ -1,0 +1,56 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+
+# npm
+package-lock.json
+*.log
+*.gz
+
+/public
+# /api
+
+
+# Coveralls
+.nyc_output
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+/api/**/*.js.map
+.vercel
+
+# dist build output
+# /dist
+
+# db files
+*.sqlite
+*.db
+
+
+
+
+# Prisma
+generated/prisma/
+yarn-error.log/
+vendor/
+tmp/
+# dist/
+.DS_Store
+.idea
+tmp-resolvers
+package-lock.json
+flow-typed
+yarn.lock
+orm/**/migrations/
+misc/**/migrations/
+databases/**/migrations/
+experimental/**/*.db
+.next
+.vscode/
+.nuxt
+dev.db
+*.env*
+!.env.example
