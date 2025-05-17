@@ -14,7 +14,7 @@ export const generateToken = (userID: string | number): string => {
     },
     envVariables.JWT_SECRET_KEY,
     {
-      expiresIn: "1h",
+      expiresIn: "1d", // token will expire in 1 day
     }
   );
 

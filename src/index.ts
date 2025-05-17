@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import { envVariables } from "./utils/env";
+import authRouter from "./routes/auth";
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/ping", (req, res) => {
   res.json({ message: "pong" });
 });
+
+app.use("/api/auth", authRouter);
 
 export default app;
 
