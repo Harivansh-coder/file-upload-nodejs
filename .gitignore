@@ -54,3 +54,10 @@ experimental/**/*.db
 dev.db
 *.env*
 !.env.example
+
+# avoid docs, pdf, and other files
+*.pdf
+*.doc
+*.jpg
+*.jpeg
+*.png

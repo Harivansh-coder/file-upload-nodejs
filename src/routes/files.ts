@@ -1,28 +1,33 @@
 import { Router } from "express";
+import {
+  getFileByIdController,
+  uploadFileController,
+} from "../controllers/file";
+import multer from "multer";
+import { verifyAccessToken } from "../middleware/auth";
 
 const filesRouter = Router();
 
-filesRouter.post("/upload", (req, res) => {
-  // Handle file upload
-  const file = req.file; // Assuming you're using a middleware like multer to handle file uploads
-  if (!file) {
-    return res.status(400).json({ message: "No file uploaded" });
-  }
-
-  // Save the file to the server or cloud storage
-  // ...
-
-  res.status(200).json({ message: "File uploaded successfully", file });
+// Multer setup for file uploads
+export const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (_req, file, cb) => {
+    const safeName = `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`;
+    cb(null, safeName);
+  },
 });
 
-filesRouter.get("/:id", (req, res) => {
-  // Handle file retrieval
-  const fileId = req.params.id;
+export const upload = multer({ storage });
 
-  // Retrieve the file from the server or cloud storage
-  // ...
+filesRouter.post(
+  "/upload",
+  verifyAccessToken,
+  upload.single("file"),
+  uploadFileController
+);
 
-  res.status(200).json({ message: "File retrieved successfully", fileId });
-});
+filesRouter.get("/:id", verifyAccessToken, getFileByIdController);
 
 export default filesRouter;
