@@ -15,5 +15,5 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "src/jobs/worker.js", "src/jobs/producer.js"]
 }

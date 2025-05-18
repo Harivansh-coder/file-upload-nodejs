@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../utils/database";
+import { enqueueFileProcessingJob } from "../jobs/producer";
 
 export const uploadFileController = async (req: Request, res: Response) => {
   try {
@@ -15,7 +16,7 @@ export const uploadFileController = async (req: Request, res: Response) => {
     // Logic to save the file information to the database or perform any other operations
     const uploadedFile = await prisma.file.create({
       data: {
-        userId: req.user.id, // Assuming you have user ID from authentication middleware
+        userId: req.user.id,
         originalFilename: file.originalname,
         storagePath: `/uploads/${file.filename}`, // Path to the file in your storage
         title: file.originalname,
@@ -28,9 +29,11 @@ export const uploadFileController = async (req: Request, res: Response) => {
       return;
     }
 
-    // now that the file is uploaded, you can perform any additional operations
-    // add a message in the bullmq queue
-    // to process the file asynchronously
+    // now that the file is uploaded, lets enqueue a job to process it
+    await enqueueFileProcessingJob({
+      id: uploadedFile.id,
+      storagePath: uploadedFile.storagePath,
+    });
 
     // You can also return the file information or any other relevant data
 
