@@ -23,31 +23,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // Multer setup for file uploads
 const storage = multer.diskStorage({
-  destination: (req: any, file, cb) => {
-    // Ensure the directory exists
-    const fs = require("fs");
-    const dir = "uploads/";
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, {
-        recursive: true,
-      });
-    }
+  destination: (req: any, file: any, cb: any) => {
     cb(null, "uploads/"); // Directory to save uploaded files
   },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique filename
+  filename: (req: any, file: any, cb: any) => {
+    cb(null, `${Date.now()}-${file.originalname.replace(/\s+/g, "-")}`); // Unique filename
   },
 });
 
 const upload = multer({ storage });
-app.use(upload.single("file")); // Use this middleware for file uploads
-app.use((req, res, next) => {
-  // Middleware to handle file uploads
-  if (req.file) {
-    console.log("File uploaded:", req.file);
-  }
-  next();
-});
 
 // Routes
 app.get("/ping", (_req, res) => {
@@ -56,7 +40,29 @@ app.get("/ping", (_req, res) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/files", filesRouter);
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  try {
+    const file = req.file;
 
+    console.log("File uploaded:", file);
+
+    if (file === undefined) {
+      res.status(400).json({ message: "No file uploaded" });
+      return;
+    }
+    // File upload successful
+
+    res.status(200).json({
+      message: "File uploaded successfully",
+      file: {
+        ...file,
+      },
+    });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    res.status(500).json({ message: "Error uploading file" });
+  }
+});
 export default app;
 
 // start server for development environment
