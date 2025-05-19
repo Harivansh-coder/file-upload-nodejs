@@ -5,12 +5,18 @@ import {
 } from "../controllers/file";
 import multer from "multer";
 import { verifyAccessToken } from "../middleware/auth";
+import fs from "fs";
 
 const filesRouter = Router();
 
 // Multer setup for file uploads
 export const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
+    // if folder does not exist, create it
+    if (!fs.existsSync("uploads")) {
+      fs.mkdirSync("uploads");
+    }
+
     cb(null, "uploads/");
   },
   filename: (_req, file, cb) => {

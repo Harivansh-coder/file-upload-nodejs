@@ -21,6 +21,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/dist
+      - /app/generated
     env_file:
       - .env
     depends_on:
@@ -28,12 +30,13 @@ services:
       - redis
 
   db:
-    image: postgres:15
+    image: postgres:14-alpine
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: mydb
+      POSTGRES_INITDB_ARGS: "--data-checksums"
     ports:
       - "5432:5432"
     volumes:
@@ -43,6 +46,7 @@ services:
     image: redis:6-alpine
     ports:
       - "6379:6379"
+    restart: always
 
 volumes:
   pgdata:

@@ -4,7 +4,11 @@ import fs from "fs/promises";
 import crypto from "crypto";
 import prisma from "../utils/database";
 
-const redisConnection = new IORedis({ maxRetriesPerRequest: null });
+const redisConnection = new IORedis({
+  host: process.env.REDIS_HOST || "redis",
+  port: Number(process.env.REDIS_PORT) || 6379,
+  maxRetriesPerRequest: null,
+});
 
 const fileWorker = new Worker(
   "file-processing-queue",
