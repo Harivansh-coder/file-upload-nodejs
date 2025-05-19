@@ -1,0 +1,42 @@
+# Node modules and dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.*          # e.g., .env.development, .env.production
+
+# Logs
+logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode
+.idea
+*.swp
+
+# Test files
+coverage
+*.test.js
+*.spec.js
+*.test.ts
+*.spec.ts
+jest.config.js
+
+# Build artifacts
+dist
+build
+*.tsbuildinfo
+
+# Uploads (optional: exclude if uploads should not be committed)
+uploads/*
+
+# Docker artifacts
+Dockerfile.dev
+docker-compose.override.yml
